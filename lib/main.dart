@@ -13,22 +13,7 @@ class CafeRecipeApp extends StatefulWidget {
 }
 
 class _CafeRecipeAppState extends State<CafeRecipeApp> {
-  final List<Map<String, dynamic>> recipes = [
-    {
-      'name': 'Café Espresso',
-      'extractionMethod': 'Espresso',
-      'ingredients': 'Café molido, Agua',
-      'preparationMethod': 'Preparar el café con una máquina de espresso...',
-      'isFavorite': false,
-    },
-    {
-      'name': 'Cold Brew',
-      'extractionMethod': 'Cold Brew',
-      'ingredients': 'Café molido grueso, Agua fría',
-      'preparationMethod': 'Preparar el café en frío por inmersión...',
-      'isFavorite': true,
-    },
-  ];
+
 
   @override
   Widget build(BuildContext context) {
