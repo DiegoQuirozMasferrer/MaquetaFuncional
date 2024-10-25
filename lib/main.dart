@@ -44,13 +44,24 @@ class HomeScreen extends StatefulWidget {
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
+
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    print("initState() llamado en HomeScreen");
+  }
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    print("didChangeDependencies() llamado en HomeScreen");
+  }
   Widget build(BuildContext context) {
+
     // Filtrar las favoritas
     List<Map<String, dynamic>> favoriteRecipes = widget.recipes
         .where((recipe) => recipe['isFavorite'] == true)
@@ -224,4 +235,35 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
+  @override
+  void setState(VoidCallback fn) {
+    super.setState(fn);
+    print("setState() llamado");
+  }
+
+  @override
+  void didUpdateWidget(covariant HomeScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    print("didUpdateWidget() llamado ");
+  }
+
+  @override
+  void deactivate() {
+    print("deactivate() llamado");
+    super.deactivate();
+  }
+
+  @override
+  void dispose() {
+    print("dispose() llamado");
+    super.dispose();
+  }
+
+  @override
+  void reassemble() {
+    super.reassemble();
+    print("reassemble() llamado");
+  }
+
 }
