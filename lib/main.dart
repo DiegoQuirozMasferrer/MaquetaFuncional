@@ -61,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
     print("didChangeDependencies() llamado en HomeScreen");
   }
   Widget build(BuildContext context) {
-
+    print("build() llamado en HomeScreen");
     // Filtrar las favoritas
     List<Map<String, dynamic>> favoriteRecipes = widget.recipes
         .where((recipe) => recipe['isFavorite'] == true)
