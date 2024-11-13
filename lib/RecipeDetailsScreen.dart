@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:share_plus/share_plus.dart';
 
 
 class RecipeDetailsScreen extends StatelessWidget {
@@ -34,9 +34,30 @@ class RecipeDetailsScreen extends StatelessWidget {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             Text(recipe['preparationMethod']),
+
+            IconButton(
+              icon: Icon(Icons.share),
+              onPressed: () => shareRecipe(recipe),
+            )
           ],
+
         ),
+
       ),
+
     );
   }
+
+
+
+
+  void shareRecipe(Map<String, dynamic> recipe) {
+    Share.share(
+      'Receta: ${recipe['name']}\n'
+          'Método: ${recipe['extractionMethod']}\n'
+          'Ingredientes: ${recipe['ingredients']}\n'
+          'Preparación: ${recipe['preparationMethod']}',
+    );
+  }
+
 }

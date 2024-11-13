@@ -1,3 +1,37 @@
+buildscript {
+    ext.kotlin_version = '1.9.0'
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.android.tools.build:gradle:7.3.0'
+    }
+}
+
+plugins {
+    id "com.android.application"
+    id 'org.jetbrains.kotlin.android' version '1.9.0' apply true
+}
+
+android {
+    namespace "com.example.maquetafuncional_cafe"
+    compileSdkVersion 33
+
+    defaultConfig {
+        applicationId "com.example.maquetafuncional_cafe"
+        minSdkVersion 21
+        targetSdkVersion 33
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+}
+
 allprojects {
     repositories {
         google()
@@ -6,13 +40,14 @@ allprojects {
 }
 
 rootProject.buildDir = "../build"
+
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
 }
-subprojects {
-    project.evaluationDependsOn(":app")
+
+tasks.named("clean") {
+    doLast {
+        delete rootProject.buildDir
+    }
 }
 
-tasks.register("clean", Delete) {
-    delete rootProject.buildDir
-}

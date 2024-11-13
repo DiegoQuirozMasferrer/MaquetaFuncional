@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'FeedbackScreen.dart';
 import 'RecipeDetailsScreen.dart';
 import 'RecipeListScreen.dart';
 import 'SettingsScreen.dart';
@@ -229,6 +230,16 @@ class _HomeScreenState extends State<HomeScreen> {
               ).then((_) {
                 _scaffoldKey.currentState?.openEndDrawer();
               });
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.feedback),
+            title: Text('Enviar Feedback'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => FeedbackScreen()),
+              );
             },
           ),
         ],
