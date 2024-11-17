@@ -13,17 +13,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   bool _isDarkMode = false;
   Color _selectedColor = Colors.brown;
-
   String _selectedFont = 'Roboto';
 
   @override
   void initState() {
     super.initState();
-
     final themeNotifier = Provider.of<ThemeNotifier>(context, listen: false);
     _isDarkMode = themeNotifier.isDarkMode;
     _selectedColor = themeNotifier.primaryColor;
-
     _selectedFont = themeNotifier.fontFamily;
   }
 
@@ -39,7 +36,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
-            // Modo Oscuro
             ListTile(
               title: Text('Modo Oscuro'),
               trailing: Switch(
@@ -47,25 +43,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 onChanged: (value) {
                   setState(() {
                     _isDarkMode = value;
+                    themeNotifier.toggleDarkMode(value);
                   });
                 },
               ),
             ),
             Divider(),
-
-
             ListTile(
               title: Text('Color Principal'),
               trailing: DropdownButton<Color>(
-                value: _selectedColor,
+                value: colors.contains(_selectedColor) ? _selectedColor : colors.first,
                 onChanged: (Color? newColor) {
                   setState(() {
                     _selectedColor = newColor!;
+                    themeNotifier.setPrimaryColor(_selectedColor);
                   });
-
-
-                  final themeNotifier = Provider.of<ThemeNotifier>(context, listen: false);
-                  themeNotifier.setPrimaryColor(_selectedColor);
                 },
                 items: colors.map((Color color) {
                   return DropdownMenuItem<Color>(
@@ -80,10 +72,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
             Divider(),
-
-
-
-
             ListTile(
               title: Text('Tipografía'),
               trailing: DropdownButton<String>(
@@ -91,6 +79,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 onChanged: (String? newFont) {
                   setState(() {
                     _selectedFont = newFont!;
+                    themeNotifier.setFontFamily(_selectedFont);
                   });
                 },
                 items: fontFamilies.map((String font) {
@@ -105,32 +94,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
             Divider(),
-
-
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: ElevatedButton(
                 onPressed: () {
-                  // Aplicar los cambios al ThemeNotifier
                   themeNotifier.toggleDarkMode(_isDarkMode);
                   themeNotifier.setPrimaryColor(_selectedColor);
-
                   themeNotifier.setFontFamily(_selectedFont);
-
-
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Configuraciones aplicadas')),
                   );
-
-                  // Volver a la pantalla anterior
                   Navigator.pop(context);
                 },
-                child: Text(
-                  'Aplicar Cambios',
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
-                ),
+                child: Text('Aplicar Cambios'),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(vertical: 16.0),
                   backgroundColor: themeNotifier.primaryColor,

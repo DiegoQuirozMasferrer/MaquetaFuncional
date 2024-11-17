@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "name": "Espresso",
+    "ingredients": "Café molido fino, agua caliente",
+    "preparationMethod": "Utilizar una máquina de espresso",
+    "extractionMethod": "Espresso",
+    "isFavorite": 0,
+    "imagePath": "assets/espresso.png",
+    "isPredefined": true
+  },
+  {
+    "id": 2,
+    "name": "Café Latte",
+    "ingredients": "Espresso, leche caliente",
+    "preparationMethod": "Agregar leche caliente al espresso",
+    "extractionMethod": "Espresso",
+    "isFavorite": 0,
+    "imagePath": "assets/latte.png",
+    "isPredefined": true
+  },
+  {
+    "id": 3,
+    "name": "Cappuccino",
+    "ingredients": "Espresso, leche espumada",
+    "preparationMethod": "Añadir leche espumada al espresso",
+    "extractionMethod": "Espresso",
+    "isFavorite": 0,
+    "imagePath": "assets/cappuccino.png",
+    "isPredefined": true
+  },
+  {
+    "id": 4,
+    "name": "Cold Brew",
+    "ingredients": "Café molido grueso, agua fría",
+    "preparationMethod": "Dejar reposar en agua fría durante 12 horas",
+    "extractionMethod": "Cold Brew",
+    "isFavorite": 0,
+    "imagePath": "assets/cold_brew.png",
+    "isPredefined": true
+  }
+]

@@ -1,3 +1,16 @@
+buildscript {
+    ext.kotlin_version = '1.9.24' // Asegúrate de usar esta versión
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "com.android.tools.build:gradle:8.1.0"
+    }
+}
+
+// Asegúrate de que el bloque de configuración global venga después del buildscript
 allprojects {
     repositories {
         google()
@@ -6,9 +19,11 @@ allprojects {
 }
 
 rootProject.buildDir = "../build"
+
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
 }
+
 subprojects {
     project.evaluationDependsOn(":app")
 }

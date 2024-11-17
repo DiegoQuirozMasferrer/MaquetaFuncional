@@ -1,14 +1,14 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:maquetafuncional_cafe/RecipeListScreen.dart';
-
-import 'main.dart';
-
-
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import 'RecipeNotifier.dart';
 
 class UploadRecipeScreen extends StatefulWidget {
-  final List<Map<String, dynamic>> recipes;
+  final Map<String, dynamic>? recipeToEdit;
+  final bool isEditing;
 
-  UploadRecipeScreen({required this.recipes});
+  UploadRecipeScreen({this.recipeToEdit, this.isEditing = false});
 
   @override
   _UploadRecipeScreenState createState() => _UploadRecipeScreenState();
@@ -16,204 +16,154 @@ class UploadRecipeScreen extends StatefulWidget {
 
 class _UploadRecipeScreenState extends State<UploadRecipeScreen> {
   final _formKey = GlobalKey<FormState>();
-
-
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _ingredientsController = TextEditingController();
   final TextEditingController _methodController = TextEditingController();
-  String? _extractionMethod = 'Espresso';
+  String? _extractionMethod;
+  String? _imagePath;
 
+  final ImagePicker _picker = ImagePicker();
 
+  @override
+  void initState() {
+    super.initState();
+    // Si estamos en modo edición, carga los datos existentes
+    if (widget.isEditing && widget.recipeToEdit != null) {
+      _nameController.text = widget.recipeToEdit!['name'];
+      _ingredientsController.text = widget.recipeToEdit!['ingredients'];
+      _methodController.text = widget.recipeToEdit!['preparationMethod'];
+      _extractionMethod = widget.recipeToEdit!['extractionMethod'];
+      _imagePath = widget.recipeToEdit!['imagePath'] ?? '';
+    }
+  }
+
+  // Función para seleccionar imagen desde la galería
+  Future<void> _pickImageFromGallery() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _imagePath = pickedFile.path;
+      });
+    }
+  }
+
+  // Función para seleccionar imagen desde la cámara
+  Future<void> _pickImageFromCamera() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.camera);
+    if (pickedFile != null) {
+      setState(() {
+        _imagePath = pickedFile.path;
+      });
+    }
+  }
+
+  // Guardar la receta
   void _submitRecipe() {
     if (_formKey.currentState!.validate()) {
-      setState(() {
+      final recipeNotifier = Provider.of<RecipeNotifier>(context, listen: false);
 
-        widget.recipes.add({
-          'name': _nameController.text,
-          'ingredients': _ingredientsController.text,
-          'preparationMethod': _methodController.text,
-          'extractionMethod': _extractionMethod,
-          'isFavorite': false,
-        });
-      });
+      Map<String, dynamic> newRecipe = {
+        'id': widget.isEditing ? widget.recipeToEdit!['id'] : null,
+        'name': _nameController.text,
+        'ingredients': _ingredientsController.text,
+        'preparationMethod': _methodController.text,
+        'extractionMethod': _extractionMethod,
+        'isFavorite': widget.isEditing ? widget.recipeToEdit!['isFavorite'] : 0,
+        'imagePath': _imagePath ?? '',
+      };
 
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => RecipeListScreen(recipes: widget.recipes,)),
+      if (widget.isEditing) {
+        recipeNotifier.updateRecipe(newRecipe);
+      } else {
+        recipeNotifier.addRecipe(newRecipe);
+      }
 
-          result: ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Receta creada')),
-          ));
+      Navigator.pop(context);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-
-
-    final borderColor = isDarkMode ? Colors.brown : Colors.white;
-
     return Scaffold(
       appBar: AppBar(
-        title: Text('Subir Receta'),
-        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+        title: Text(widget.isEditing ? 'Editar Receta' : 'Subir Receta'),
       ),
-      body: Stack(
-        children: [
-
-          Positioned.fill(
-            child: ColorFiltered(
-              colorFilter: isDarkMode
-                  ? ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.darken) // Oscurece el fondo
-                  : ColorFilter.mode(Colors.transparent, BlendMode.multiply),
-              child: Image.asset(
-                'assets/background.png',
-                fit: BoxFit.cover,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            children: [
+              TextFormField(
+                controller: _nameController,
+                decoration: InputDecoration(labelText: 'Nombre de la receta'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, ingresa un nombre';
+                  }
+                  return null;
+                },
               ),
-            ),
-          ),
-          // El contenido del formulario
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Form(
-              key: _formKey,
-              child: ListView(
+              SizedBox(height: 10),
+              TextFormField(
+                controller: _ingredientsController,
+                decoration: InputDecoration(labelText: 'Ingredientes'),
+                maxLines: 3,
+              ),
+              SizedBox(height: 10),
+              TextFormField(
+                controller: _methodController,
+                decoration: InputDecoration(labelText: 'Método de preparación'),
+                maxLines: 5,
+              ),
+              SizedBox(height: 10),
+              DropdownButtonFormField<String>(
+                value: _extractionMethod,
+                items: ['Espresso', 'Pour-over', 'Cold Brew', 'French Press']
+                    .map((method) => DropdownMenuItem(
+                  value: method,
+                  child: Text(method),
+                ))
+                    .toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _extractionMethod = value;
+                  });
+                },
+                decoration: InputDecoration(labelText: 'Método de Extracción'),
+              ),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  TextFormField(
-                    controller: _nameController,
-                    decoration: InputDecoration(
-                      labelText: 'Nombre de la Receta',
-                      labelStyle: TextStyle(color: borderColor),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: borderColor, width: 2),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: borderColor, width: 2),
-                      ),
-                    ),
-                    style: TextStyle(color:borderColor),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Por favor, ingresa el nombre de la receta';
-                      }
-                      return null;
-                    },
+                  ElevatedButton.icon(
+                    onPressed: _pickImageFromGallery,
+                    icon: Icon(Icons.photo_library),
+                    label: Text('Galería'),
                   ),
-                  SizedBox(height: 20),
-                  TextFormField(
-                    controller: _ingredientsController,
-                    decoration: InputDecoration(
-                      labelText: 'Ingredientes',
-                      hintText: 'Separar los ingredientes por comas',
-                      labelStyle: TextStyle(color: borderColor),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: borderColor, width: 2),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: borderColor, width: 2),
-                      ),
-                    ),
-                    style: TextStyle(color: borderColor),
-                    maxLines: 3,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Por favor, ingresa los ingredientes';
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 20),
-                  TextFormField(
-                    controller: _methodController,
-                    decoration: InputDecoration(
-
-                      labelText: 'Método de Preparación',
-                      hintText: 'Describe cómo preparar la receta',
-                      labelStyle: TextStyle(color: borderColor),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12), // Bordes redondeados
-                        borderSide: BorderSide(color: borderColor, width: 2),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: borderColor, width: 2),
-                      ),
-                    ),
-                    style: TextStyle(color: borderColor),
-                    maxLines: 5,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Por favor, describe el método de preparación';
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 20),
-                  DropdownButtonFormField<String>(
-                    value: _extractionMethod,
-                    decoration: InputDecoration(
-                      labelText: 'Método de Extracción',
-                      labelStyle: TextStyle(color: borderColor),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12), // Bordes redondeados
-                        borderSide: BorderSide(color: borderColor, width: 2),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: borderColor, width: 2),
-                      ),
-                    ),
-                    items: <String>['Espresso', 'Pour-over', 'Cold Brew', 'French Press']
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        _extractionMethod = newValue;
-                      });
-                    },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Por favor, selecciona un método de extracción';
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: _submitRecipe,
-                    child: Text('Subir Receta'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-                      padding: EdgeInsets.symmetric(vertical: 16.0),
-                      textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: borderColor),
-
-                      shape: RoundedRectangleBorder(
-
-                        borderRadius: BorderRadius.circular(12), // Bordes redondeados del botón
-                      ),
-                    ),
+                  ElevatedButton.icon(
+                    onPressed: _pickImageFromCamera,
+                    icon: Icon(Icons.camera_alt),
+                    label: Text('Cámara'),
                   ),
                 ],
               ),
-            ),
+              SizedBox(height: 20),
+              if (_imagePath != null && _imagePath!.isNotEmpty)
+                Image.file(
+                  File(_imagePath!),
+                  height: 200,
+                  fit: BoxFit.cover,
+                ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _submitRecipe,
+                child: Text(widget.isEditing ? 'Guardar Cambios' : 'Subir Receta'),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
 }
-
-
-
-// Pantalla de detalles de la receta

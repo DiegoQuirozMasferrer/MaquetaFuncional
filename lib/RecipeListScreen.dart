@@ -1,154 +1,119 @@
 import 'package:flutter/material.dart';
-import 'package:maquetafuncional_cafe/UploadRecipeScreen.dart';
-
+import 'package:provider/provider.dart';
+import 'RecipeNotifier.dart';
 import 'RecipeDetailsScreen.dart';
+import 'UploadRecipeScreen.dart';
+import 'dart:io';
 
 class RecipeListScreen extends StatefulWidget {
-  final List<Map<String, dynamic>> recipes;
-
-  RecipeListScreen({required this.recipes});
-
   @override
   _RecipeListScreenState createState() => _RecipeListScreenState();
 }
 
 class _RecipeListScreenState extends State<RecipeListScreen> {
-  bool showFavoritesOnly = false;
-
-
-  void _toggleFavoriteFilter() {
-    setState(() {
-      showFavoritesOnly = !showFavoritesOnly;
-    });
+  @override
+  void initState() {
+    super.initState();
+    final recipeNotifier = Provider.of<RecipeNotifier>(context, listen: false);
+    recipeNotifier.loadRecipes();
   }
 
-
-  void _toggleFavorite(int index) {
-    setState(() {
-      widget.recipes[index]['isFavorite'] = !widget.recipes[index]['isFavorite'];
-    });
+  void _refreshRecipes() {
+    final recipeNotifier = Provider.of<RecipeNotifier>(context, listen: false);
+    recipeNotifier.loadRecipes();
+    setState(() {}); // Forzar la actualización de la pantalla
   }
 
   @override
   Widget build(BuildContext context) {
-
-    List<Map<String, dynamic>> displayedRecipes = showFavoritesOnly
-        ? widget.recipes.where((recipe) => recipe['isFavorite']).toList()
-        : widget.recipes;
+    final recipeNotifier = Provider.of<RecipeNotifier>(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(showFavoritesOnly ? 'Favoritos' : 'Lista de Recetas'),
-        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+        title: Text('Lista de Recetas'),
         actions: [
-
           IconButton(
-            icon: Icon(
-              showFavoritesOnly ? Icons.favorite : Icons.favorite_border,
-              color: showFavoritesOnly ? Colors.red : Colors.white,
-            ),
-            onPressed: _toggleFavoriteFilter,
+            icon: Icon(Icons.refresh),
+            onPressed: _refreshRecipes,
           ),
         ],
       ),
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: Image.asset(
-              'assets/background.png',
-              fit: BoxFit.cover,
-            ),
-          ),
-          displayedRecipes.isEmpty
-              ? Center(
-            child: Text(
-              showFavoritesOnly
-                  ? 'No tienes recetas favoritas'
-                  : 'No hay recetas guardadas',
-              style: TextStyle(fontSize: 18,  color : Colors.white ) ,
+      body: recipeNotifier.recipes.isEmpty
+          ? Center(child: Text('No hay recetas guardadas'))
+          : ListView.builder(
+        itemCount: recipeNotifier.recipes.length,
+        itemBuilder: (context, index) {
+          final recipe = recipeNotifier.recipes[index];
 
-
-            ),
-          )
-              : ListView.builder(
-            itemCount: displayedRecipes.length,
-            itemBuilder: (context, index) {
-              final recipe = displayedRecipes[index];
-              return Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0, vertical: 8.0),
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
+          return Card(
+            margin: EdgeInsets.all(8.0),
+            child: ListTile(
+              contentPadding: EdgeInsets.all(16.0),
+              leading: SizedBox(
+                width: 50,
+                height: 50,
+                child: IconButton(
+                  icon: Icon(
+                    recipe['isFavorite'] == 1 ? Icons.favorite : Icons.favorite_border,
+                    color: recipe['isFavorite'] == 1 ? Colors.red : Colors.grey,
                   ),
-                  elevation: 4,
-                  child: ListTile(
-                    contentPadding: EdgeInsets.all(16.0),
-                    leading: Icon(
-                      Icons.coffee,
-                      color: Theme.of(context).appBarTheme.backgroundColor,
-                      size: 40,
-                    ),
-                    title: Text(
-                      recipe['name'],
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context)
-                            .appBarTheme
-                            .backgroundColor,
-                      ),
-                    ),
-                    subtitle: Text(
-                      'Método de extracción: ${recipe['extractionMethod']}\nIngredientes: ${recipe['ingredients']}',
-                    ),
-                    trailing: IconButton(
-                      icon: Icon(
-                        recipe['isFavorite']
-                            ? Icons.favorite
-                            : Icons.favorite_border,
-                        color: recipe['isFavorite']
-                            ? Colors.red
-                            : Colors.grey,
-                      ),
-                      onPressed: () {
-                        _toggleFavorite(index); //  favorito
-                      },
-                    ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              RecipeDetailsScreen(recipe: recipe),
-                        ),
-                      );
-                    },
-                  ),
+                  onPressed: () {
+                    recipeNotifier.toggleFavorite(index);
+                    setState(() {});
+                  },
                 ),
-              );
-            },
-          ),
-        ],
+              ),
+              title: Text(
+                recipe['name'],
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              subtitle: Text(
+                'Método: ${recipe['extractionMethod']}',
+                style: TextStyle(color: Colors.grey[700]),
+              ),
+              trailing: SizedBox(
+                width: 60,
+                height: 60,
+                child: recipe['imagePath'] != null && recipe['imagePath'].isNotEmpty
+                    ? (recipe['imagePath'].startsWith('assets/')
+                    ? ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: Image.asset(
+                    recipe['imagePath'],
+                    fit: BoxFit.cover,
+                  ),
+                )
+                    : ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: Image.file(
+                    File(recipe['imagePath']),
+                    fit: BoxFit.cover,
+                  ),
+                ))
+                    : Icon(Icons.coffee, size: 40, color: Colors.brown),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => RecipeDetailsScreen(recipe: recipe),
+                  ),
+                );
+              },
+            ),
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (context) => UploadRecipeScreen(recipes: widget.recipes),
-            ),
-          ).then((_) {
-            setState(() {});
-          });
+            MaterialPageRoute(builder: (context) => UploadRecipeScreen()),
+          ).then((_) => _refreshRecipes()); // Refrescar al volver
         },
         child: Icon(Icons.add),
         backgroundColor: Theme.of(context).primaryColor,
       ),
-
-
-
     );
   }
 }

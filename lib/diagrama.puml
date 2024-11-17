@@ -1,0 +1,12 @@
+@startuml
+start
+:Inicio de Sesión;
+if (¿Cargo los datos?) then (sí)
+  :Pantalla Principal;
+else (no)
+  :Mostrar error;
+endif
+:Ver Recetas;
+:Crear Receta;
+stop
+@enduml

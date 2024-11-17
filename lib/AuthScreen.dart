@@ -1,10 +1,6 @@
-
-
-
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
+import 'RecipeNotifier.dart';
 import 'main.dart';
 
 class AuthScreen extends StatelessWidget {
@@ -12,7 +8,7 @@ class AuthScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Autenticación'),
+        title: const Text('Autenticación'),
         backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
       ),
       body: Padding(
@@ -22,60 +18,72 @@ class AuthScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              // Logo de la aplicación
+              const CircleAvatar(
+                radius: 80.0,
+                backgroundImage: AssetImage('assets/logo.png'),
+                backgroundColor: Colors.transparent,
+              ),
+              const SizedBox(height: 20),
+
               // Campo de nombre de usuario
               TextField(
                 decoration: InputDecoration(
                   labelText: 'Nombre de Usuario',
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12), // Bordes redondeados
+                    borderRadius: BorderRadius.circular(12),
                   ),
                   filled: true,
                   fillColor: Colors.white,
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
+
               // Campo de contraseña
               TextField(
                 obscureText: true,
                 decoration: InputDecoration(
                   labelText: 'Contraseña',
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12), // Bordes redondeados
+                    borderRadius: BorderRadius.circular(12),
                   ),
                   filled: true,
                   fillColor: Colors.white,
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
+
               // Botón de inicio de sesión
               ElevatedButton(
-                onPressed: () {Navigator.pushReplacement(
+                onPressed: () {
+                  final recipeNotifier = Provider.of<RecipeNotifier>(context, listen: false);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Iniciando sesión...')),
+                  );
+                  Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                    builder: (context) => HomeScreen(recipes: [],)),
-
-                  result: ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Iniciando sesión...')),
-                  ));
+                        builder: (context) => HomeScreen(recipes: recipeNotifier.recipes)
+                      ,
+                    ),
+                  );
                 },
-                child: Text('Iniciar Sesión'),
+                child: const Text('Iniciar Sesión'),
                 style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: 16.0),
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
                   backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-                  textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12), // Bordes redondeados del botón
-                  ),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
+
+              // Enlace para "Olvidaste tu contraseña"
               TextButton(
                 onPressed: () {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Olvidé mi contraseña...')),
+                    const SnackBar(content: Text('Olvidé mi contraseña...')),
                   );
                 },
-                child: Text('¿Olvidaste tu contraseña?'),
+                child: const Text('¿Olvidaste tu contraseña?'),
               ),
             ],
           ),
