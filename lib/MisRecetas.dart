@@ -76,7 +76,9 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
               items: [
                 null, // Opción para mostrar todas las recetas
                 'Café',
-                'Pastel'
+                'Pastel',
+                'Té'
+
               ].map((type) {
                 return DropdownMenuItem<String>(
                   value: type,

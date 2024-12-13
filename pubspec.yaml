@@ -87,6 +87,12 @@ flutter:
     - assets/torta_limon.jpg
     - assets/torta_zanahoria.png
     - assets/torta_red_velvet.png
+    - assets/matcha-latte.png
+    - assets/te_jengibre_limon.png
+    - assets/te_manzanilla.png
+    - assets/te_verde_menta.png
+    - assets/chai_latte.png
+    - assets/cafe_mocha.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

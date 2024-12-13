@@ -97,5 +97,93 @@
     "imagePath": "assets/torta_red_velvet.png",
     "isPredefined": true,
     "type": "Pastel"
+  },
+
+    {
+      "id": 10,
+      "name": "Té Matcha Latte",
+      "ingredients": ["Polvo de matcha", "agua caliente", "leche caliente", "miel"],
+      "preparationMethod": [
+        "Mezclar el matcha con agua caliente hasta disolver",
+        "Agregar leche caliente y endulzar con miel"
+      ],
+      "extractionMethod": "Infusión",
+      "isFavorite": 0,
+      "imagePath": "assets/matcha-latte.png",
+      "isPredefined": true,
+      "type": "Té"
+    },
+    {
+      "id": 11,
+      "name": "Té Chai Latte",
+      "ingredients": ["Té negro", "especias chai", "leche caliente", "azúcar o miel"],
+      "preparationMethod": [
+        "Hervir el té negro con especias chai en agua",
+        "Colar y mezclar con leche caliente, endulzar al gusto"
+      ],
+      "extractionMethod": "Infusión",
+      "isFavorite": 0,
+      "imagePath": "assets/chai_latte.png",
+      "isPredefined": true,
+      "type": "Té"
+    },
+    {
+      "id": 12,
+      "name": "Té de Manzanilla",
+      "ingredients": ["Flores de manzanilla", "agua caliente", "miel o limón (opcional)"],
+      "preparationMethod": [
+        "Agregar flores de manzanilla al agua caliente",
+        "Dejar reposar durante 5 minutos y servir"
+      ],
+      "extractionMethod": "Infusión",
+      "isFavorite": 0,
+      "imagePath": "assets/te_manzanilla.png",
+      "isPredefined": true,
+      "type": "Té"
+    },
+    {
+      "id": 13,
+      "name": "Té Verde con Menta",
+      "ingredients": ["Hojas de té verde", "hojas de menta fresca", "agua caliente"],
+      "preparationMethod": [
+        "Añadir hojas de té verde y menta al agua caliente",
+        "Dejar reposar durante 3-4 minutos y servir"
+      ],
+      "extractionMethod": "Infusión",
+      "isFavorite": 0,
+      "imagePath": "assets/te_verde_menta.png",
+      "isPredefined": true,
+      "type": "Té"
+    },
+    {
+      "id": 14,
+      "name": "Té de Jengibre y Limón",
+      "ingredients": ["Jengibre fresco", "agua caliente", "jugo de limón", "miel"],
+      "preparationMethod": [
+        "Hervir rodajas de jengibre en agua durante 10 minutos",
+        "Añadir jugo de limón y miel antes de servir"
+      ],
+      "extractionMethod": "Infusión",
+      "isFavorite": 0,
+      "imagePath": "assets/te_jengibre_limon.png",
+      "isPredefined": true,
+      "type": "Té"
+    },
+  {
+    "id": 15,
+    "name": "Café Mocha",
+    "ingredients": ["Espresso", "chocolate caliente", "leche espumada", "nata montada (opcional)"],
+    "preparationMethod": [
+      "Preparar un espresso",
+      "Agregar chocolate caliente y mezclar",
+      "Añadir leche espumada en la parte superior",
+      "Decorar con nata montada si se desea"
+    ],
+    "extractionMethod": "Espresso",
+    "isFavorite": 0,
+    "imagePath": "assets/cafe_mocha.png",
+    "isPredefined": true,
+    "type": "Café"
   }
+
 ]
