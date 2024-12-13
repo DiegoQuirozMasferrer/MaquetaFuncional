@@ -8,3 +8,4 @@ Funciones:
 -Crear, edita y almacena recetas de café y dulces.
 -Comparte tus recetas favoritas con tus amigos.
 -Ten guia para preparar bebidas mas conocidas.
+-Danos tu opinion para mejorar
