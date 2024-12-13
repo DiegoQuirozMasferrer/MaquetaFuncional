@@ -1,11 +1,10 @@
-
-
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'Home.dart';
 
-import 'AuthScreen.dart';
+
+
+
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -16,11 +15,11 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // Navegar automáticamente a la pantalla de autenticación después de 3 segundos
+
     Future.delayed(Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => AuthScreen()),
+        MaterialPageRoute(builder: (context) => HomeScreen(recipes: [],)),
       );
     });
   }

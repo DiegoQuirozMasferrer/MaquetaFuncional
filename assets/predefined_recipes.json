@@ -2,41 +2,100 @@
   {
     "id": 1,
     "name": "Espresso",
-    "ingredients": "Café molido fino, agua caliente",
-    "preparationMethod": "Utilizar una máquina de espresso",
+    "ingredients": ["Café molido fino", "agua caliente"],
+    "preparationMethod": ["Utilizar una máquina de espresso"],
     "extractionMethod": "Espresso",
     "isFavorite": 0,
     "imagePath": "assets/espresso.png",
-    "isPredefined": true
+    "isPredefined": true,
+    "type": "Café"
   },
   {
     "id": 2,
     "name": "Café Latte",
-    "ingredients": "Espresso, leche caliente",
-    "preparationMethod": "Agregar leche caliente al espresso",
+    "ingredients": ["Espresso", "leche caliente"],
+    "preparationMethod": ["Agregar leche caliente al espresso"],
     "extractionMethod": "Espresso",
     "isFavorite": 0,
     "imagePath": "assets/latte.png",
-    "isPredefined": true
+    "isPredefined": true,
+    "type": "Café"
   },
   {
     "id": 3,
     "name": "Cappuccino",
-    "ingredients": "Espresso, leche espumada",
-    "preparationMethod": "Añadir leche espumada al espresso",
+    "ingredients": ["Espresso", "leche espumada"],
+    "preparationMethod": ["Añadir leche espumada al espresso"],
     "extractionMethod": "Espresso",
     "isFavorite": 0,
     "imagePath": "assets/cappuccino.png",
-    "isPredefined": true
+    "isPredefined": true,
+    "type": "Café"
   },
   {
     "id": 4,
     "name": "Cold Brew",
-    "ingredients": "Café molido grueso, agua fría",
-    "preparationMethod": "Dejar reposar en agua fría durante 12 horas",
+    "ingredients": ["Café molido grueso", "agua fría"],
+    "preparationMethod": ["Dejar reposar en agua fría durante 12 horas"],
     "extractionMethod": "Cold Brew",
     "isFavorite": 0,
     "imagePath": "assets/cold_brew.png",
-    "isPredefined": true
+    "isPredefined": true,
+    "type": "Café"
+  },
+  {
+    "id": 5,
+    "name": "Torta de Chocolate",
+    "ingredients": ["Harina", "cacao en polvo", "azúcar", "huevos", "mantequilla"],
+    "preparationMethod": ["Mezclar los ingredientes", "Hornear a 180°C por 30 minutos"],
+    "extractionMethod": null,
+    "isFavorite": 0,
+    "imagePath": "assets/torta_chocolate.jpg",
+    "isPredefined": true,
+    "type": "Pastel"
+  },
+  {
+    "id": 6,
+    "name": "Torta de Zanahoria",
+    "ingredients": ["Harina", "zanahoria rallada", "azúcar moreno", "canela", "huevos"],
+    "preparationMethod": ["Mezclar los ingredientes", "Hornear a 180°C por 35 minutos"],
+    "extractionMethod": null,
+    "isFavorite": 0,
+    "imagePath": "assets/torta_zanahoria.png",
+    "isPredefined": true,
+    "type": "Pastel"
+  },
+  {
+    "id": 7,
+    "name": "Torta de Limón",
+    "ingredients": ["Harina", "jugo de limón", "ralladura de limón", "azúcar", "mantequilla", "huevos"],
+    "preparationMethod": ["Mezclar los ingredientes", "Hornear a 180°C por 25 minutos"],
+    "extractionMethod": null,
+    "isFavorite": 0,
+    "imagePath": "assets/torta_limon.jpg",
+    "isPredefined": true,
+    "type": "Pastel"
+  },
+  {
+    "id": 8,
+    "name": "Cheesecake",
+    "ingredients": ["Galletas trituradas", "mantequilla", "queso crema", "azúcar", "huevos"],
+    "preparationMethod": ["Preparar base con galletas y mantequilla", "Añadir mezcla de queso crema y hornear"],
+    "extractionMethod": null,
+    "isFavorite": 0,
+    "imagePath": "assets/cheesecake.png",
+    "isPredefined": true,
+    "type": "Pastel"
+  },
+  {
+    "id": 9,
+    "name": "Torta Red Velvet",
+    "ingredients": ["Harina", "cacao en polvo", "colorante rojo", "azúcar", "mantequilla", "huevos", "suero de leche"],
+    "preparationMethod": ["Mezclar los ingredientes", "Hornear a 180°C por 30 minutos"],
+    "extractionMethod": null,
+    "isFavorite": 0,
+    "imagePath": "assets/torta_red_velvet.png",
+    "isPredefined": true,
+    "type": "Pastel"
   }
 ]
