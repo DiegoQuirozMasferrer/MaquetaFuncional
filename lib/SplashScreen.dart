@@ -11,7 +11,6 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-
     Future.delayed(Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
@@ -26,79 +25,79 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          // Imagen de fondo para la pantalla de presentación
+          // Fondo de pantalla
           Image.asset(
-            'assets/Inicio.jpg', // Cambia por la ruta de tu imagen
+            'assets/Inicio.jpg',
             fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+              return Container(color: Colors.black); // Fondo negro si falla la imagen
+            },
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Logo de la aplicación
-              const CircleAvatar(
-                radius: 80.0,
-                backgroundImage: AssetImage('assets/logo.png'), // Cambia por la ruta de tu logo
-              ),
-              const SizedBox(height: 20),
-              // Texto principal con bordes negros
-              Stack(
-                children: [
-                  // Borde del texto
-                  Text(
-                    'Bienvenido a Maestro Café',
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      foreground: Paint()
-                        ..style = PaintingStyle.stroke
-                        ..strokeWidth = 6
-                        ..color = Colors.black,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  // Texto relleno blanco
-                  Text(
-                    'Bienvenido a Maestro Café',
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-              SizedBox(height: 10),
-              // Mensaje adicional con bordes negros
-              Stack(
-                children: [
-                  // Borde del texto adicional
-                  Text(
-                    'El mejor lugar para los amantes del café',
-                    style: TextStyle(
-                      fontSize: 16,
-                      foreground: Paint()
-                        ..style = PaintingStyle.stroke
-                        ..strokeWidth = 4
-                        ..color = Colors.black,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  // Texto adicional relleno blanco
-                  Text(
-                    'El mejor lugar para los amantes del café',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            ],
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Logotipo redondo
+                CircleAvatar(
+                  radius: 80.0,
+                  backgroundImage: AssetImage('assets/logo.png'),
+                  onBackgroundImageError: (error, stackTrace) {
+                    // Muestra un ícono de error si la imagen no se carga
+
+                  },
+                ),
+                const SizedBox(height: 20),
+
+                // Texto con efecto de borde
+                _buildTextWithBorder(
+                  'Bienvenido a Maestro Café',
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                ),
+
+                SizedBox(height: 10),
+
+                _buildTextWithBorder(
+                  'El mejor lugar para los amantes del café',
+                  fontSize: 16,
+                ),
+              ],
+            ),
           ),
         ],
       ),
+    );
+  }
+
+  // Método para crear texto con borde
+  Widget _buildTextWithBorder(String text, {double fontSize = 16, FontWeight fontWeight = FontWeight.normal}) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        // Borde del texto
+        Text(
+          text,
+          style: TextStyle(
+            fontSize: fontSize,
+            fontWeight: fontWeight,
+            foreground: Paint()
+              ..style = PaintingStyle.stroke
+              ..strokeWidth = 4
+              ..color = Colors.black,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        // Texto relleno blanco
+        Text(
+          text,
+          style: TextStyle(
+            fontSize: fontSize,
+            fontWeight: fontWeight,
+            color: Colors.white,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ],
     );
   }
 }

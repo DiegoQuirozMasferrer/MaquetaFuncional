@@ -14,7 +14,7 @@
     "id": 2,
     "name": "Café Latte",
     "ingredients": ["Espresso", "leche caliente"],
-    "preparationMethod": ["Agregar leche caliente al espresso"],
+    "preparationMethod": ["Agregar leche caliente al espresso",""],
     "extractionMethod": "Espresso",
     "isFavorite": 0,
     "imagePath": "assets/latte.png",

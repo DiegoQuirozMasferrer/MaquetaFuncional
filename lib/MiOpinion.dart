@@ -37,12 +37,11 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
   Future<void> sendFeedbackEmail() async {
     if (_formKey.currentState!.validate()) {
       final String name = _nameController.text;
-      final String group = _groupController.text;
-      final String relation = _relationController.text;
+
       final String additionalFeedback = _additionalFeedbackController.text;
 
       // Construir las respuestas de la encuesta
-      String feedbackText = 'Nombre: $name\nGrupo: $group\nRelación: $relation\n\n';
+      String feedbackText = 'Nombre: $name';
       for (var question in _questions) {
         feedbackText += '${question['titulo']}:\nRespuesta: ${question['valor']} estrellas\n\n';
       }
@@ -100,10 +99,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
             children: [
               // Campos para Nombre, Grupo y Relación
               _buildTextField(_nameController, 'Nombre', 'Por favor, ingresa tu nombre'),
-              SizedBox(height: 20),
-              _buildTextField(_groupController, 'Grupo (piloto, trabajador del área, externo)', 'Por favor, ingresa tu grupo'),
-              SizedBox(height: 20),
-              _buildTextField(_relationController, 'Relación (amigo, colega, familia, etc.)', 'Por favor, ingresa tu relación'),
+
               SizedBox(height: 20),
 
               // Preguntas de la encuesta desde el JSON
